@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../packages/sqlite3.h
+stdarg.h
+-
+
+C:/Users/stran/Documents/stuff/Personal Projects/PasswordManagementProject/main.cpp
+iostream
+-
+string
+-
+fstream
+-
+vector
+-
+utility
+-
+stdexcept
+-
+sstream
+-
+iostream
+-
+sqlite3.h
+-
+
