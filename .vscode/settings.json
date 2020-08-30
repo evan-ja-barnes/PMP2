@@ -11,6 +11,7 @@
         "vector": "cpp",
         "string": "cpp",
         "stdexcept": "cpp"
-    }
+    },
+    "git.allowForcePush": true
     
 }

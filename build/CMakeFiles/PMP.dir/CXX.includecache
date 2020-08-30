@@ -6,10 +6,6 @@
 
 #IncludeRegexTransform: 
 
-../packages/sqlite3.h
-stdarg.h
--
-
 C:/Users/stran/Documents/stuff/Personal Projects/PasswordManagementProject/main.cpp
 iostream
 -
@@ -26,7 +22,5 @@ stdexcept
 sstream
 -
 iostream
--
-sqlite3.h
 -
 
