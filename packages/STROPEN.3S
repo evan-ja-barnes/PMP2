@@ -1,0 +1,55 @@
+.TH STROPEN 3S
+.SH NAME
+stropen \- open string for stream-like I/O
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+FILE *stropen(string, mode)
+char *string;
+char *mode;
+.fi
+.SH DESCRIPTION
+.I Stropen
+returns a stdio stream pointer "opened" on the passed
+.IR string .
+The string is read from, written to, or appended to, depending on
+whether the
+.I mode
+argument is "r", "w", or "a".
+.PP
+Any stdio function that accepts a stream pointer may be used to
+perform I/O on a stream obtained with
+.IR stropen.
+This allows the full flexibility of the stdio package to be used
+when formatting or unformatting in-memory strings,
+as well as allowing in-memory strings to be read/written by any
+other utility functions which happen to deal with stdio streams.
+.PP
+When reading, the nul (\e0) terminating the string is signaled by
+EOF.
+.PP
+When writing, there is no provision for an overflow check; the passed
+.I string
+(normally a buffer of some sort) must somehow be "big enough" to
+hold the received characters.
+If boundary checking is desired, use
+.IR strnopen .
+.PP
+.IR Strnopen ,
+in combination with other stdio I/O functions, provides a
+superset of the string I/O functionality provided by
+.I sprintf
+and
+.IR sscanf.
+(\fISprintf\fP and
+.I sscanf
+allow a single operation to be performed on a string;
+.I stropen
+allows a multiplicity of arbitrary operations.)
+.SH BUGS
+.I stropen
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+strnopen(3s), sprintf(3s), sscanf(3s)

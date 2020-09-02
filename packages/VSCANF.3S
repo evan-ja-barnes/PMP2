@@ -1,0 +1,42 @@
+.TH VSCANF 3S
+.SH NAME
+vscanf, vfscanf, vsscanf \- "varargs" interface to scanf family
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <stdarg.h>
+
+vscanf(fmt, argp)
+char *fmt;
+va_list argp;
+
+vfscanf(fp, fmt, argp)
+FILE *fp;
+char *fmt;
+va_list argp;
+
+vsscanf(string, fmt, argp)
+char *string;
+char *fmt;
+va_list argp;
+.fi
+.SH DESCRIPTION
+These functions are analogous to
+.IR scanf ,
+.IR fscanf ,
+and
+.IR sscanf ,
+except that they expect a single va_list pointer
+(typically obtained with va_start)
+as an argument rather than an actual variable argument list.
+These routines can therefore be used as the underlying routines
+to implement new functions which "act like" scanf, on some other
+input or with some other difference.
+Such a routine would use va_start to obtain a "pointer" to its
+own variable argument list, and then pass the pointer to one of
+these routines to actually perform the input conversion(s).
+.SH BUGS
+These routines are obvious but nonstandard extensions;
+they should be used but warily by portable programs.
+.SH "SEE ALSO"
+scanf(3s), stdarg(3)

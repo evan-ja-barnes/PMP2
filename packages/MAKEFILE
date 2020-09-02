@@ -1,0 +1,106 @@
+HOME = /usr/stevesu
+
+OBJS = cleanup.o doprnt.o doscan.o errfunc.o \
+	fabort.o \
+	fclose.o fdopen.o fflush.o fgetc.o \
+	fdclose.o flushall.o \
+	fgets.o filbuf.o flsbuf.o fopen.o fprintf.o fputc.o \
+	fputs.o fread.o freopen.o fscanf.o fseek.o ftell.o fwrite.o gets.o \
+	getbuf.o \
+	getw.o printf.o putpad.o puts.o putw.o rewind.o scanf.o scanfiles.o \
+	funcs.o funcs2.o iob.o \
+	strutil.o strautil.o \
+	popen.o \
+	setbuf.o setvbuf.o \
+	setbuffer.o setlinebuf.o \
+	setfuncs.o seterrfn.o \
+	stropen.o strnopen.o \
+	straopen.o \
+	snprintf.o saprintf.o \
+	sprintf.o sscanf.o ungetc.o \
+	vfprintf.o vprintf.o vsprintf.o \
+	vsaprintf.o \
+	vfscanf.o vscanf.o vsscanf.o \
+	memcpy.o
+
+INC2 = $(HOME)/include
+
+CFLAGS = -O -I. -I$(INC2) -DFORCECLEANUP -DSTICKYEOF -DSTDINFLUSH -DREADWRITE \
+	-DFASTFRDWR -DFASTNBF -DASKF -DSAFEREALLOC -Dvoid=int
+
+libstdio.a: $(OBJS)
+	ar r $@ $?
+	ranlib $@
+
+fst: fst.o libstdio.a
+	$(CC) -o fst fst.o libstdio.a -lc2
+
+fwrt: fwrt.o libstdio.a
+	$(CC) -o fwrt fwrt.o libstdio.a -lc2
+
+scantest: scantest.o doscan.o
+	$(CC) -o $@ scantest.o doscan.o
+
+scantest.std: scantest.o
+	$(CC) -o $@ scantest.o
+
+askf.o: askf.c stdio.h
+doprnt.o: doprnt.c stdio.h printf.h
+doscan.o: doscan.c stdio.h
+errfunc.o: errfunc.c stdio.h
+fabort.o: fabort.c stdio.h
+fclose.o: fclose.c stdio.h
+fdclose.o: fdclose.c stdio.h
+fdopen.o: fdopen.c stdio.h
+fflush.o: fflush.c stdio.h
+fgetc.o: fgetc.c stdio.h
+fgets.o: fgets.c stdio.h
+filbuf.o: filbuf.c stdio.h
+flsbuf.o: flsbuf.c stdio.h
+fopen.o: fopen.c stdio.h funcs.h
+fprintf.o: fprintf.c stdio.h
+fputc.o: fputc.c stdio.h
+fputs.o: fputs.c stdio.h
+fread.o: fread.c stdio.h
+freopen.o: freopen.c stdio.h funcs.h
+fscanf.o: fscanf.c stdio.h
+fseek.o: fseek.c stdio.h
+ftell.o: ftell.c stdio.h
+funcs.o: funcs.c funcs.h
+funcs2.o: funcs2.c funcs.h
+fwrite.o: fwrite.c stdio.h
+getbuf.o: getbuf.c stdio.h funcs.h
+gets.o: gets.c stdio.h
+getw.o: getw.c stdio.h
+iob.o: iob.c stdio.h funcs.h
+popen.o: popen.c stdio.h funcs.h
+printf.o: printf.c stdio.h
+putpad.o: putpad.c stdio.h printf.h
+puts.o: puts.c stdio.h
+putw.o: putw.c stdio.h
+rewind.o: rewind.c stdio.h
+saprintf.o: saprintf.c stdio.h
+scanf.o: scanf.c stdio.h
+scanfiles.o: scanfiles.c stdio.h
+setbuf.o: setbuf.c stdio.h
+setbuffer.o: setbuffer.c stdio.h
+seterrfn.o: seterrfn.c stdio.h
+setfuncs.o: setfuncs.c stdio.h
+setlinebuf.o: setlinebuf.c stdio.h
+setvbuf.o: setvbuf.c stdio.h funcs.h
+snprintf.o: snprintf.c stdio.h
+sprintf.o: sprintf.c stdio.h
+sscanf.o: sscanf.c stdio.h
+strutil.o: strutil.c stdio.h
+straopen.o: straopen.c stdio.h
+strautil.o: strautil.c stdio.h funcs.h
+strnopen.o: strnopen.c stdio.h
+stropen.o: stropen.c stdio.h
+ungetc.o: ungetc.c stdio.h
+vfprintf.o: vfprintf.c stdio.h
+vfscanf.o: vfscanf.c stdio.h
+vprintf.o: vprintf.c stdio.h
+vsaprintf.o: vsaprintf.c stdio.h
+vscanf.o: vscanf.c stdio.h
+vsprintf.o: vsprintf.c stdio.h
+vsscanf.o: vsscanf.c stdio.h

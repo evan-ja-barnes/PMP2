@@ -1,0 +1,41 @@
+.TH SNPRINTF 3S
+.SH NAME
+snprintf \- sprintf with overflow detection
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+snprintf(buf, len, fmt, ...)
+char *buf;
+int len;
+char *fmt;
+.fi
+.SH DESCRIPTION
+.I snprintf
+is like
+.I sprintf
+is that it formats a string into the destination buffer
+.IR buf ,
+controlled by the formatting argument
+.I fmt
+and interpolating any additional arguments (indicated by %'s in
+the format string) as required.
+However, no more that
+.I len
+characters, including the trailing \e0, will be written to
+.IR buf .
+(The trailing \e0 is always written, so at most \fIn\fP-1 "real"
+characters will be written to
+.IR buf .)
+.PP
+.I snprintf
+allows the programmer to exclude the possibility of buffer
+overflow, since in many cases the results of the formatting
+operation could be arbitrarily large, and not predictable at
+compile time.
+.SH BUGS
+.I snprintf
+is a common but nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+sprintf(3s), saprintf(3s), strnopen(3s)

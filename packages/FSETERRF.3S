@@ -1,0 +1,77 @@
+.TH FSETERRFUNC 3S
+.SH NAME
+fseterrfunc \- install default or per-stream error handler
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+fseterrfunc(fp, errfunc)
+FILE *fp;
+int (*errfunc)();
+.fi
+.SH DESCRIPTION
+.I Fseterrfunc
+associates the error-handling function pointed to by
+.I func
+with the stream
+.IR fp .
+If
+.I fp
+is NULL, the function is instead installed as the default handler
+for all streams without explicitly-installed handlers.
+.PP
+When an I/O error occurs, the error-handling function is called as
+.sp
+.nf
+.in +.6i
+	(*func)(filename, rw, fp)
+	char *filename;
+	int rw;
+	FILE *fp;
+.in -.6i
+.fi
+.I fp
+is the stream pointer for the operation incurring the error.
+.I filename
+is the name of the associated file, if known
+(or NULL if not).
+.I rw
+is a character denoting the kind of error.
+The error codes defined so far are:
+.sp
+.nf
+	'r'	read error
+	'w'	write error
+	'c'	close error
+	's'	(l)seek error
+	'm'	memory allocation error
+.fi
+.sp
+Other error codes may be defined in the future.
+.PP
+The operation of the default error handler is to print a message
+(to stderr) including the file name, kind of error, and
+.I perror
+text.
+If
+.I rw
+is 'w', the default handler calls exit(1).
+.LP
+The default error handler can be replaced by calling
+.I fseterrfunc
+with an
+.I fp
+of NULL.
+.PP
+When installing a new default error handler, the programmer
+should beware of the possibility of infinite recursion.
+For example, the default handler, which prints to stderr, returns
+immediately (without printing anything) if
+.I fp
+is stderr and
+.I rw
+is 'w'.
+.SH BUGS
+.I fseterrfunc
+is a nonstandard extension;
+it should be used but warily by portable programs.

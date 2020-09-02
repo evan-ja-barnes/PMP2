@@ -1,0 +1,26 @@
+.TH FLUSHALL 3S
+.SH NAME
+flushall \- flush all open streams
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+flushall()
+.fi
+.SH DESCRIPTION
+.I Flushall
+performs the effect of
+.I fflush
+for all currently open streams.
+No streams are closed.
+.I flushall
+is useful for checkpointing an application before some
+time-consuming, risky, or terminal operation.
+.SH BUGS
+.I flushall
+is a nonstandard extension;
+it should be used but warily by portable programs.
+The ANSI C standard states that fflush((FILE *)NULL) will flush
+all open streams.
+.SH "SEE ALSO"
+fflush(3s), scanfiles(3s)

@@ -1,0 +1,33 @@
+.TH FDCLOSE 3S
+.SH NAME
+fdclose \- close stream without closing low-level descriptor
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+fdclose(fp)
+FILE *fp;
+.fi
+.SH DESCRIPTION
+.I Fdclose
+completes I/O on,
+and deletes the data structures associated with,
+a stdio stream,
+without actually closing the underlying file descriptor (or other handle).
+Its name reflects its complementary nature to
+.I fdopen
+(q.v.);
+the sequence
+.DS
+int fd = ...;
+FILE *fp = fdopen(fd, ...);
+...
+fdclose(fp);
+.DE
+leaves the file descriptor fd afterwards available for further I/O.
+.SH BUGS
+.I fdclose
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+fdopen(3s), fclose(3s)

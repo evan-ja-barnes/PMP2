@@ -1,0 +1,36 @@
+.TH FABORT 3S
+.SH NAME
+fabort \- discard buffered characters without flushing them
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+fabort(fp)
+FILE *fp;
+.fi
+.SH DESCRIPTION
+.I Fabort
+discards characters which have been buffered by the stdio package
+but whose I/O is not complete.
+For output streams,
+characters which have been written by the calling program
+(with
+.IR putc ,
+.IR printf ,
+and the like)
+but which have not yet been written to the underlying file
+descriptor (or "handle") are discarded.
+For input streams, any characters which have been "read ahead"
+into the buffer, but not yet retrieved by the calling program
+(with getchar, scanf, etc.) are discarded.
+.SH BUGS
+.I fabort
+is a nonstandard extension;
+it should be used but warily by portable programs.
+Some other stdio implementations perform the same effect as
+.I fabort
+when
+.I fflush
+is applied to an input stream.
+.SH "SEE ALSO"
+fflush(3S), fclose(3S)

@@ -1,0 +1,37 @@
+.TH SAPRINTF 3S
+.SH NAME
+saprintf \- formatted print to dynamically-allocated string
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+char *saprintf(fmt, ...)
+char *fmt;
+.fi
+.SH DESCRIPTION
+.I Saprintf
+performs formatted printing, in the style of
+.IR printf ,
+on the
+.I fmt
+string, interpolating additional arguments as required.
+The output is written to dynamically-allocated memory
+(typically obtained with
+.I malloc
+and/or
+.IR realloc )
+and a pointer to that memory is returned.
+The returned pointer may be (and should be) deallocated with
+.I free
+when no longer needed.
+.PP
+It is the responsibility of the calling program to free the
+pointers returned by
+.IR saprintf ;
+no garbage collection is implied.
+.SH BUGS
+.I saprintf
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+printf(3s), sprintf(3s), vsaprintf(3s)

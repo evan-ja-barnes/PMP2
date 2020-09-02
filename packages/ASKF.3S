@@ -1,0 +1,60 @@
+.TH ASKF 3S
+.SH NAME
+askf \- user input function with prompt
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+askf(prompt, ..., fmt, ...)
+char *prompt;
+char *fmt;
+.fi
+.SH DESCRIPTION
+.I Askf
+is a general-purpose user input function.
+It is intended to alleviate the difficulties encountered when
+.I scanf
+is used for this purpose.
+.I askf
+prints the
+.I prompt
+string on the terminal and awaits a response.
+The
+.I prompt
+string can contain
+.IR printf -like
+formatting requests; any values to be interpolated (via %'s) appear
+.I between
+the
+.I prompt
+and
+.I fmt
+arguments.
+.PP
+.I askf
+collects responses from the user as controlled by the
+.I fmt
+argument.
+.I fmt
+can contain any of the input requests which are accepted by the
+scanf family, with extensions and restrictions as noted below.
+.PP
+If the user's input is incorrect,
+.I askf
+normally prints the prompt again and waits for the user to try again.
+.PP
+The
+.I fmt
+string should normally contain only input format specifiers and
+(optional) separating white space.
+Any literal characters appearing in the
+.I fmt
+string must be matched by the user,
+which would not normally be "user friendly."
+
+.SH BUGS
+.I askf
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+printf(3s), scanf(3s)

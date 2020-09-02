@@ -1,0 +1,55 @@
+.TH VSAPRINTF 3S
+.SH NAME
+vsaprintf \- "varargs" sprintf to dynamically-allocated string
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+#include <stdarg.h>
+
+char *vsaprintf(fmt, argp)
+char *fmt;
+va_list argp;
+.fi
+.SH DESCRIPTION
+.I vsaprintf
+is like
+.I vsprintf
+is that it formats a string,
+controlled by the formatting argument
+.I fmt
+and interpolating additional arguments
+which are obtained indirectly through the variable-length
+argument list pointer argp.
+.I vsaprintf
+s unique in that, list saprintf, the destination for the
+formatted string is a dynamically-allocated buffer
+(typically obtained with
+.I malloc
+and/or
+.IR realloc )
+which is automatically sized to be just big enough for the actual
+string created.
+.PP
+The return value of
+.I vsaprintf
+is a pointer to dynamically-allocated memory.
+It may (and should) be deallocated with
+.I free
+when it is no longer needed, or memory will be wasted.
+.PP
+The use of
+.I vsaprintf
+is indicated when the size of the resultant string cannot be
+predicted (the usual case for a v*printf routine, since the
+format string and arguments are always passed in from elsewhere).
+The alternative, a fixed but "large" destination buffer used with
+.IR vsprintf ,
+suffers because the buffer must typically either waste space by
+being fantastically large, or risk overflow in some rare but
+impossible to predict or eliminate case.
+.SH BUGS
+.I vsaprintf
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+saprintf(3s), straopen(3s), vsprintf(3s)

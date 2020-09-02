@@ -3,6 +3,7 @@ A simple pass word manager
 Author: Evan Barnes
 Date: 8/22/2020
 */
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -11,16 +12,18 @@ Date: 8/22/2020
 #include <stdexcept>
 #include <sstream>
 #include <windows.h>
-#include <iostream> 
-#include <boost/algorithm/string.hpp>
-
+#include <cctype>
+#include <cstring>
+#include <cstdio>
+//#include <boost/algorithm/string.hpp>
 
 
 using namespace std;
+
 class PMP{
     public:
     vector<vector<string>> currentDB;
-    string PATH = "C:/Users/Stran/Downloads/Docs/";
+    string PATH = "C:/Users/stran/Downloads/Docs/";
     string FILENAME;
     PMP(string dbName){
         currentDB = readCSV(dbName);
@@ -73,16 +76,16 @@ class PMP{
                     getline(ss, line2, ',');
                     int sz = line2.size()-1;
                     if(sz>0){
-                    if(line2.at(sz) =='"'){
-                        
-                        if(outVect1[i][j-1].at(0) == '"'){
+                        if(line2.at(sz) =='"'){
+                            
+                            if(outVect1[i][j-1].at(0) == '"'){
 
-                            string st1 = (outVect1[i][j-1] + ',' + line2);
-                            string st2 = st1.substr(1, st1.size()-2);
-                            outVect1[i][j-1] =st2;
-                            continue;
+                                string st1 = (outVect1[i][j-1] + ',' + line2);
+                                string st2 = st1.substr(1, st1.size()-2);
+                                outVect1[i][j-1] =st2;
+                                continue;
+                            }
                         }
-                    }
                     }
                     outVect1[i][j] = line2;
                     
@@ -179,7 +182,7 @@ class PMP{
                 cout << "Please enter the name of the service you would like to assign this process too, or enter exit to exit\n";
                 string strinp;
                 cin >>strinp;
-                strinp = boost::to_lower(strinp);
+                strinp = toLowerS(strinp);
                 while(!validInput){
                     if(strinp == "exit"){
                         validInput = true;
@@ -188,7 +191,7 @@ class PMP{
                         for(auto arr : currentDB){
                             if(arr[0] == strinp){
                                 arr[4]=strinp;
-                                //write_CSV(PATH+FILENAME, currentDB);
+                                write_CSV(PATH+FILENAME, currentDB);
                                 matches.push_back(arr);
                             }
                         }
@@ -200,7 +203,7 @@ class PMP{
                 failed = addNewLine();
                 if(!failed){
                     matches.push_back(currentDB[sizeof(currentDB)-1]);
-                    //write_CSV(PATH+FILENAME, currentDB);
+                    write_CSV(PATH+FILENAME, currentDB);
 
                 }
             }else{
@@ -213,12 +216,12 @@ class PMP{
                 return(matches[0][1]);
             }
         }else if(sizeof(matches)==1){
-            return(matches[0][1])
+            return(matches[0][1]);
         }else{
             cout << "Your choices are: ";
             int i;
             for(auto arro : matches){
-                cout << arro[0] << "(" << i << "), "
+                cout << arro[0] << "(" << i << "), ";
             }
             cout << ("please enter the number corrosponding to your choice or 0 to exit.");
             int inp;
@@ -252,9 +255,9 @@ class PMP{
             cout << "Please enter data for: " << currentDB[0][i] << ", or enter exit to exit.\n";
             string strinput;
             cin >> strinput;
-            strinput = boost::to_lower(strinput);
+            strinput = toLowerS(strinput);
             if(strinput != "exit"){
-                //write_CSV(PATH+FILENAME, currentDB);
+                write_CSV(PATH+FILENAME, currentDB);
 
                 newLine.push_back(strinput);
 
@@ -266,16 +269,51 @@ class PMP{
         if(!failed){
             currentDB.push_back(newLine);
         }else{
-            //write_CSV(PATH+FILENAME, currentDB);
+            write_CSV(PATH+FILENAME, currentDB);
 
         }
         return(failed);
 
     }
+    string toLowerS(string strIn){
+        string lowerString;
+        for(auto c : strIn){
+            lowerString = lowerString + (char) tolower(c);
+        }
+        return lowerString;
+    }
+    void write_CSV(string file, vector<vector<string>> writeArrayD){
+        vector<vector<string>> writeArray = writeArrayD;
+        vector<string> v1 = {"penis","penis","penis","penis","penis","penis",};
+        
+        writeArray.push_back(v1);
+        char * ch = new char [sizeof(file)+1];
+        
+        strcpy(ch, file.c_str());
+        //remove(ch);
+        ofstream c (file);
+        int i,j;
+        int z = writeArray.size();
+        for(i = 0; i < writeArray.size()-1;i++){
+            for(j = 0; j < writeArray[1].size()-1; j++){
+                
+                if(writeArray[i][j].find(',')!=string::npos){
+                    writeArray[i][j] ="\"" + writeArray[i][j] = "\"";
+                }
+                c << writeArray[i][j];
+                if(j!= writeArray[i].size()){
+                    c << ",";
+                }
+            }
+            c << "\n";
+        }
+        c.close();
+    }
 };
 
 int main(){
-    PMP daPMP("db.csv");
-    string activeWindow = daPMP.getActWind();
+    PMP daPMP("DB2.csv");
+    daPMP.write_CSV(daPMP.PATH+daPMP.FILENAME, daPMP.currentDB);
+    
     return 0;
 }   

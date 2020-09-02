@@ -1,0 +1,72 @@
+.TH STRAOPEN 3S
+.SH NAME
+straopen \- open dynamically-allocating string stream
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+FILE *straopen();
+
+char *straptr(fp);
+FILE *fp;
+
+char *straclose(fp);
+FILE *fp;
+.fi
+.SH DESCRIPTION
+.I straopen
+returns a stream, open for writing, upon which arbitrary output
+operations can be performed.
+The "output" destination is a
+dynamically-allocated buffer which grows as required to
+accommodate as many characters as are written.
+.PP
+As output operations are performed and the string is built up,
+the work-in-progress may be inspected by calling
+.IR straptr ,
+which returns a pointer to the string which has been built so far.
+The string is terminated with the usual '\e0'.
+The pointer returned by
+.I straptr
+should not be saved for very long, since the next operation on
+the stream may provoke a reallocation which could move the string
+in memory, invalidating the older pointer.
+.PP
+When all output operations have been performed and the string is
+completely built,
+.I straclose
+may be called.
+.I Straclose
+resizes the allocated buffer to the actual size reached
+(freeing any extra memory that had been preallocated)
+and returns a pointer to the final buffer.
+(The string is, of course, terminated with a '\e0'.)
+.PP
+The return value of
+.I straclose
+is a pointer to dynamically-allocated memory.
+It may (and should) be deallocated with
+.I free
+when it is no longer needed, or memory will be wasted.
+(However, it would be a grave error to free the pointer returned by
+.IR straptr .)
+.PP
+It is an error to call
+.I straptr
+or
+.I straclose
+with a stream pointer other than one obtained with
+.IR straopen .
+Such an error may or may not be detected.
+.PP
+It is permissible to close a \fIstraopen\fPed stream with
+.IR fclose ;
+however, the sizedown may not occur and the final pointer must
+have been acquired independently with
+.IR straptr .
+.SH BUGS
+.I straopen
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+stropen(3s), saprintf(3s)

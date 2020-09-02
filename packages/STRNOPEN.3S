@@ -1,0 +1,61 @@
+.TH STRNOPEN 3S
+.SH NAME
+strnopen \- open length-specified string for stream-like I/O
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+FILE *strnopen(string, n, mode)
+char *string;
+int n;
+char *mode;
+.fi
+.SH DESCRIPTION
+.I Strnopen
+returns a stdio stream pointer "opened" on the passed
+.IR string ,
+whose length is
+.IR n.
+The string is read from, written to, or appended to, depending on
+whether the
+.I mode
+argument is "r", "w", or "a".
+.PP
+Any stdio function that accepts a stream pointer may be used to
+perform I/O on a stream obtained with
+.IR stropen.
+This allows the full flexibility of the stdio package to be used
+when formatting or unformatting in-memory strings,
+as well as allowing in-memory strings to be read/written by any
+other utility functions which happen to deal with stdio streams.
+.PP
+A stream opened for reading by
+.I strnopen
+will supply exactly
+.I n
+characters before returning EOF.
+(The scan is not terminated prematurely if a \e0 is encountered before
+.I n
+characters have been used up.
+This behavior is somewhat incompatible with that of
+.I strncat
+and
+.IR strncpy .)
+.PP
+When writing, no more that
+.I n
+characters may be written to the stream supplied.
+(An attempt to write more characters will result in an error code
+being returned by the top-level write call, if the calling
+program happens to be checking.)
+When appending (\fImode\fP "a"),
+.I n
+is still interpreted as the buffer size (not to be exceeded),
+not the length of the string to be appended to (in the absence of
+an explicit \e0).
+.SH BUGS
+.I strnopen
+is a nonstandard extension;
+it should be used but warily by portable programs.
+.SH "SEE ALSO"
+stropen(3s), sprintf(3s)

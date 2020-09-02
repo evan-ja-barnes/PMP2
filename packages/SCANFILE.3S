@@ -1,0 +1,28 @@
+.TH scanfiles 3S
+.SH NAME
+scanfiles \- call function for each open stream
+.SH SYNOPSIS
+.nf
+#include <stdio.h>
+
+scanfiles(func)
+int (*func)(FILE *);
+.fi
+.SH DESCRIPTION
+.I Scanfiles
+calls
+.I func
+for each currently-open stream.
+Each invocation
+.I func
+is passed a single argument, the stream pointer in question.
+.SH "RETURN VALUE"
+.I Scanfiles
+returns no useful value.
+(The return values from the calls to
+.I func
+are ignored.)
+.SH BUGS
+.I scanfiles
+is a nonstandard extension;
+it should be used but warily by portable programs.

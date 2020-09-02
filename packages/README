@@ -1,0 +1,219 @@
+From alt.sources Wed Feb 14 14:33:08 1990
+Path: laura!unido!mcsun!sunic!luth!eru!bloom-beacon!avarice.pika.mit.edu!scs
+From: scs@avarice.pika.mit.edu (Steve Summit)
+Newsgroups: alt.sources
+Subject: Standard I/O reimplementation, part 1 of 3
+Keywords: stdio
+Message-ID: <1990Feb10.235159.4522@athena.mit.edu>
+Date: 10 Feb 90 23:51:59 GMT
+Sender: news@athena.mit.edu (News system)
+Reply-To: scs@adam.mit.edu (Steve Summit)
+Distribution: alt
+Organization: Massachvsetts Institvte of Technology
+Lines: 2476
+Posted: Sun Feb 11 00:51:59 1990
+
+This posting contains an essentially complete, "nearly" public
+domain reimplementation of the "standard I/O" package. 
+("`Nearly' public domain" means that there are the usual few
+restrictions; see the copyright notices and COPYING file for
+details.)
+
+A paper is included describing this package, the new features it
+contains, and its implementation.  The abstract of that paper
+serves as a useful introduction:
+
+	This paper describes a new implementation of the
+	traditional C/UNIX stdio package.  Although retaining
+	the efficiency and (to the extent possible) the
+	compactness of the original, this implementation
+	contains several significant improvements, including
+	user-definable underlying I/O functions, improved
+	error handling, new routines for "string" I/O, and
+	efficient unbuffered I/O.  This package is intended
+	to be compatible with the proposed ANSI C standard,
+	although it contains new functions not mentioned in
+	that standard.
+
+I am posting this to alt.sources because, although it is mostly
+"finished," I have not performed the exhaustive testing and
+evaluation of it that I would like to.  The mainstream source
+group moderators are welcome to pick it up and repost it, if that
+seems appropriate.  (A later, "released" version will definitely
+be posted on a mainstream source newsgroup.)
+
+Mail from the world at large into my home machine (adam) is
+sporadic at best; if you can't reach me, post articles to
+alt.sources.d and/or comp.sources.d .  (On the other hand,
+I don't keep up with usenet much of late, so do send mail if
+it's important and you can.)
+
+Besides the descriptive paper and the COPYING file, the README
+file may be of interest to those delving into the code.
+(It contains my notes about work in progress, open design
+decisions, future directions, etc.)
+
+I must admit that I haven't worked on or even looked at this
+package for some time; even its bundling for posting happened
+last September, although downed machines and absent-mindedness
+delayed it until now.  All this means is that I might be as
+surprised at what this posting contains as you; I can't remember
+exactly what shape I thought it was in.  I do notice that it
+contains a very experimental and incomplete function called askf
+which I hadn't thought I'd post at first; you may well want to
+remove the -DASKF from CFLAGS in the Makefile.
+
+The code as it stands was developed and tested on a (!) pdp11
+running a V7 derivative.  I don't remember if I have tested it on
+a Vax or not.  It should run under 4BSD without difficulty; AT&T
+Unix might require a bit of work.  Eventually, I'll get it
+running under MS-DOS (and maybe VMS); these possibilities have
+been anticipated and an attempt made to keep the code maximally
+portable, although significant changes (particularly with respect
+to non-byte-offset lseek cookies, and significant "binary" file
+distinctions) will certainly be necessary.  I might also point
+out that any claims about X3J11 conformance are essentially
+hollow promises at this point; I still haven't read an official
+copy or done any careful work to ensure ANSIness.
+
+                                   Steve Summit
+                                   scs@adam.mit.edu
+                                   scs@hstbme.mit.edu (temporary)
+
+------8<--------8<--------8<----stdio1.shar----8<--------8<------
+overwritecheck=yes
+verbose=yes
+
+while true; do
+	case $1 in
+		-f)	overwritecheck=no
+			shift;;
+
+		-q)	verbose=no
+			shift;;
+
+		-v)	verbose=yes
+			shift;;
+
+		-*)	echo "shar: unknown option $1" 1>&2
+			shift;;
+
+		*)	break;;
+	esac
+done
+
+if test $overwritecheck = no -o ! -f paper.ms; then
+case $verbose in
+yes)	echo "extracting paper.ms";;
+esac
+
+
+From alt.sources Wed Feb 14 14:33:35 1990
+Path: laura!unido!mcsun!uunet!snorkelwacker!bloom-beacon!avarice.pika.mit.edu!scs
+From: scs@avarice.pika.mit.edu (Steve Summit)
+Newsgroups: alt.sources
+Subject: Standard I/O reimplementation, part 2 of 3
+Keywords: stdio
+Message-ID: <1990Feb11.001420.5429@athena.mit.edu>
+Date: 11 Feb 90 00:14:20 GMT
+Sender: news@athena.mit.edu (News system)
+Reply-To: scs@adam.mit.edu (Steve Summit)
+Organization: Massachvsetts Institvte of Technology
+Lines: 2486
+Posted: Sun Feb 11 01:14:20 1990
+
+This posting contains an essentially complete, "nearly" public
+domain reimplementation of the "standard I/O" package. 
+("`Nearly' public domain" means that there are the usual few
+restrictions; see the copyright notices and COPYING file for
+details.)
+
+This is part 2; part 3 follows.  Part 1 (which was Message-ID
+<1990Feb10.235159.4522@athena.mit.edu>) contained a more
+descriptive cover letter.
+
+                                   Steve Summit
+                                   scs@adam.mit.edu
+                                   scs@hstbme.mit.edu (temporary)
+
+------8<--------8<--------8<----stdio2.shar----8<--------8<------
+overwritecheck=yes
+verbose=yes
+
+while true; do
+	case $1 in
+		-f)	overwritecheck=no
+			shift;;
+
+		-q)	verbose=no
+			shift;;
+
+		-v)	verbose=yes
+			shift;;
+
+		-*)	echo "shar: unknown option $1" 1>&2
+			shift;;
+
+		*)	break;;
+	esac
+done
+
+case $verbose in
+yes)	echo "extracting Copyright";;
+esac
+
+
+From alt.sources Wed Feb 14 14:33:48 1990
+Path: laura!unido!mcsun!uunet!snorkelwacker!bloom-beacon!avarice.pika.mit.edu!scs
+From: scs@avarice.pika.mit.edu (Steve Summit)
+Newsgroups: alt.sources
+Subject: Standard I/O reimplementation, part 3 of 3
+Keywords: stdio
+Message-ID: <1990Feb11.004144.6391@athena.mit.edu>
+Date: 11 Feb 90 00:41:44 GMT
+Sender: news@athena.mit.edu (News system)
+Reply-To: scs@adam.mit.edu (Steve Summit)
+Organization: Massachvsetts Institvte of Technology
+Lines: 2375
+Posted: Sun Feb 11 01:41:44 1990
+
+This posting contains an essentially complete, "nearly" public
+domain reimplementation of the "standard I/O" package. 
+("`Nearly' public domain" means that there are the usual few
+restrictions; see the copyright notices and COPYING file for
+details.)
+
+This is the third and last part.  Part 1 (which was Message-ID
+<1990Feb10.235159.4522@athena.mit.edu>) contained a more
+descriptive cover letter.
+
+                                   Steve Summit
+                                   scs@adam.mit.edu
+                                   scs@hstbme.mit.edu (temporary)
+
+------8<--------8<--------8<----stdio3.shar----8<--------8<------
+overwritecheck=yes
+verbose=yes
+
+while true; do
+	case $1 in
+		-f)	overwritecheck=no
+			shift;;
+
+		-q)	verbose=no
+			shift;;
+
+		-v)	verbose=yes
+			shift;;
+
+		-*)	echo "shar: unknown option $1" 1>&2
+			shift;;
+
+		*)	break;;
+	esac
+done
+
+case $verbose in
+yes)	echo "extracting Copyright";;
+esac
+
